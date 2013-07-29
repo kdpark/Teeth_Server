@@ -116,6 +116,7 @@ ROOT_URLCONF = 'teeth_server.urls'
 WSGI_APPLICATION = 'teeth_server.wsgi.application'
 
 TEMPLATE_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -129,10 +130,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'polls',
+    'books',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -163,3 +165,8 @@ LOGGING = {
         },
     }
 }
+
+try:
+    from teeth_server.settings_local import *
+except Exception as e:
+    print e
