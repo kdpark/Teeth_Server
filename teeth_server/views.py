@@ -30,19 +30,19 @@ def login(request):
 	email = request.POST.get('email', '')
 	password = request.POST.get('password', '')
 	
-	if user is not None and user.is_active:
-		# Correct password, and the user is marked "active"
-		auth.login(request, user)
-		# Redirect to a success page.
-		return HttpResponseRedirect("/accounts/loggedin/")
-	else:
-        # Show an error page
-		return HttpResponseRedirect("/accounts/invalid/")
+	if (email=='' or password==''):
+		return HttpResponse(simpleJson(4,'Error-Blank Form'))
 
-def logout(request):
-	auth.logout(request)
-	# Redirect to a success page.
-	return HttpResponseRedirect("/accounts/loggedout/")
+	target = User.objects.filter(email__exact=email)
+	if target.count():
+		#existing
+		if target[0].password == password:
+			c = {'Status' : 1, 'Log': 'success', 'Value': target[0].id}
+			return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+		else:
+			return HttpResponse(simpleJson(2, 'Wrong password'))
+	else:
+		return HttpResponse(simpleJson(3, 'The email is not in DB'))
 
 def signin(request):
 	# join module, Create User

@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Auth &mdash; TeethServer 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TeethServer 0.6 documentation" href="index.html" />
+    <link rel="next" title="Friend" href="friend.html" />
+    <link rel="prev" title="Welcome to TeethServer’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="friend.html" title="Friend"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to TeethServer’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TeethServer 0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="auth">
+<span id="ref-auth"></span><h1>Auth<a class="headerlink" href="#auth" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="signin">
+<h2>Signin 회원가입<a class="headerlink" href="#signin" title="Permalink to this headline">¶</a></h2>
+<p>회원가입 API</p>
+<p>URL: /accounts/signin/</p>
+<p>Method: POST</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>기본적으로 모든 API는 POST로 처리한다</em></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">비밀번호는 Client에서 암호화시켜서 전송해야함!</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">URL 마지막을 / 로 닫아줘야한다.</p>
+</div>
+<table border="1" class="docutils">
+<caption>Input Parameters</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>username</td>
+<td>이름</td>
+</tr>
+<tr class="row-odd"><td>password</td>
+<td>비밀번호 (암호화된 비밀번호를 보내기 바람)</td>
+</tr>
+<tr class="row-even"><td>email</td>
+<td>이메일 (양식체크 미리 해주기 바람)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Output</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Status</td>
+<td>1 성공, 2 이메일 중복, 3 input값 없음</td>
+</tr>
+<tr class="row-odd"><td>Log</td>
+<td>설명</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="login">
+<h2>Login<a class="headerlink" href="#login" title="Permalink to this headline">¶</a></h2>
+<p>로그인 API</p>
+<p>URL : /accounts/login/</p>
+<table border="1" class="docutils">
+<caption>Input Parameters</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>email</td>
+<td>이메일</td>
+</tr>
+<tr class="row-odd"><td>password</td>
+<td>비밀번호 (암호화된 비밀번호를 보내기 바람)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Output</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Status</td>
+<td>1 성공, 2 비밀번호 오류, 3 ID가 DB에 없음, 4 input값 없음</td>
+</tr>
+<tr class="row-odd"><td>Log</td>
+<td>설명</td>
+</tr>
+<tr class="row-even"><td>Value</td>
+<td>user의 id 값 (if success)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="logout">
+<h2>Logout<a class="headerlink" href="#logout" title="Permalink to this headline">¶</a></h2>
+<p>현재 API 불필요</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Auth</a><ul>
+<li><a class="reference internal" href="#signin">Signin 회원가입</a></li>
+<li><a class="reference internal" href="#login">Login</a></li>
+<li><a class="reference internal" href="#logout">Logout</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to TeethServer&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="friend.html"
+                        title="next chapter">Friend</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/auth.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="friend.html" title="Friend"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to TeethServer’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">TeethServer 0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, kdPark.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

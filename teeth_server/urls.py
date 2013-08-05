@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 import views
 admin.autodiscover()
 
@@ -11,10 +12,10 @@ urlpatterns = patterns('',
 	url(r'^search-form/$', 'teeth_server.views.search_form'),
 	url(r'^accounts/signin/$', 'teeth_server.views.signin'),
 	url(r'^accounts/login/$', 'teeth_server.views.login'),
-	#url(r'^accounts/logout/$', 'teeth_server.views.logout'),
 	url(r'^accounts/example/$', 'teeth_server.views.example'),
     url(r'^main/$', 'teeth_server.views.main'),
 	url(r'^open/$', 'teeth_server.views.open'),
+	
 	# url(r'^invite/$', views.invite, name='invite'),
     
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -23,3 +24,5 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
+
+urlpatterns += static('apidoc/', document_root="docs/_build/html/") + staticfiles_urlpatterns()
