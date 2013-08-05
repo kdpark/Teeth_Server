@@ -6,7 +6,5 @@ class User(models.Model):
 	email = models.CharField(max_length=40, blank = False, unique = True)
 	jointime = models.DateTimeField(auto_now = True)
 	friendship = models.ManyToManyField("User")
+#	friendreq = models.ManyToManyField("User")
 
-
-	
-			
