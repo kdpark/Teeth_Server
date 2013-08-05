@@ -3,6 +3,7 @@ from django.template import RequestContext, Context, Template, loader
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import auth, admin
+from meeting.models import User
 import json
 
 def home(request):
@@ -40,10 +41,29 @@ def logout(request):
 	# Redirect to a success page.
 	return HttpResponseRedirect("/accounts/loggedout/")
 
+def signin(request):
+	# join module
+	# POST : username, email, password
+	# OUTPUT : 1 - success , 2 - existing email , 3 - 
+	email = request.POST.get('email', '')
+	
+	if User.objects.filter(email__exact=email).count():
+		c = {'Status' : 0, 'Log': 'Duplicate Email'}
+		output = json.dumps(c, indent=4, separators = (',', ':'))
+		return HttpResponse(output)
+
+	username = request.POST.get('username')
+	password = request.POST.get('password')
+	newUser = User(name=username, password=password, email=email)
+	newUser.save()
+	c = {'Status' : 1, 'Log': 'Sign Success'}
+	output = json.dumps(c, indent=4, separators = (',', ':'))
+	return HttpResponse(output)
+
 def example(request):
 	# json example
-	username = request.POST.get('username', '')
-	password = request.POST.get('password', '')
+	username = request.POST.get('username')
+	password = request.POST.get('password')
 	if(username == 'abc' and password =='123'):
 		status = 1
 		log = 'success'
