@@ -22,11 +22,14 @@ def search(request):
 	else:
 		return render_to_response('search_form.html', {'error': True})
 """
+def simpleJson(num, msg):
+	c = {'Status' : num, 'Log': msg}
+	return json.dumps(c, indent=4, separators = (',', ':'))
 
 def login(request):
-	username = request.POST.get('username', '')
+	email = request.POST.get('email', '')
 	password = request.POST.get('password', '')
-	user = auth.authenticate(username=username, password=password)
+	
 	if user is not None and user.is_active:
 		# Correct password, and the user is marked "active"
 		auth.login(request, user)
@@ -42,23 +45,22 @@ def logout(request):
 	return HttpResponseRedirect("/accounts/loggedout/")
 
 def signin(request):
-	# join module
+	# join module, Create User
 	# POST : username, email, password
-	# OUTPUT : 1 - success , 2 - existing email , 3 - 
-	email = request.POST.get('email', '')
-	
-	if User.objects.filter(email__exact=email).count():
-		c = {'Status' : 0, 'Log': 'Duplicate Email'}
-		output = json.dumps(c, indent=4, separators = (',', ':'))
-		return HttpResponse(output)
+	# OUTPUT : 1- success, 2- duplicated email, 3-blank form
+	email = request.POST.get('email','')
+	username = request.POST.get('username','')
+	password = request.POST.get('password','')
 
-	username = request.POST.get('username')
-	password = request.POST.get('password')
+	if (email=='' or username=='' or password==''):
+		return HttpResponse(simpleJson(3,'Error-Blank Form'))
+
+	if User.objects.filter(email__exact=email).count():
+		return HttpResponse(simpleJson(2, 'Duplicated Email'))
+
 	newUser = User(name=username, password=password, email=email)
 	newUser.save()
-	c = {'Status' : 1, 'Log': 'Sign Success'}
-	output = json.dumps(c, indent=4, separators = (',', ':'))
-	return HttpResponse(output)
+	return HttpResponse(simpleJson(1, 'Success sign'))
 
 def example(request):
 	# json example
@@ -71,9 +73,7 @@ def example(request):
 		status = 2
 		log = 'failed'
 
-	c = {'Status' : status, 'Log':log}
-	output = json.dumps(c, indent=4, separators = (',', ':'))
-	return HttpResponse(output)
+	return HttpResponse(simpleJson(status, log))
 
 def main(request):
 	# input : user id.
