@@ -1,4 +1,6 @@
 # Django settings for teeth_server project.
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -66,8 +68,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-import os
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 STATIC_ROOT = 'staticfiles'
 
 # URL prefix for static files.
@@ -134,8 +135,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'polls',
-    'books',
+    'meeting',
 )
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
