@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Friend &mdash; TeethServer 0.6 documentation</title>
+    <title>Friend &mdash; TeethServer 0.7 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.6',
+        VERSION:     '0.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="TeethServer 0.6 documentation" href="index.html" />
-    <link rel="next" title="&lt;no title&gt;" href="pick.html" />
+    <link rel="top" title="TeethServer 0.7 documentation" href="index.html" />
+    <link rel="next" title="Pick" href="pick.html" />
     <link rel="prev" title="Auth" href="auth.html" /> 
   </head>
   <body>
@@ -35,12 +35,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="pick.html" title="&lt;no title&gt;"
+          <a href="pick.html" title="Pick"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="auth.html" title="Auth"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">TeethServer 0.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">TeethServer 0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,6 +52,63 @@
   <div class="section" id="friend">
 <span id="ref-friend"></span><h1>Friend<a class="headerlink" href="#friend" title="Permalink to this headline">¶</a></h1>
 <p>친구 관계에 해당하는 모듈</p>
+<div class="section" id="add-friend">
+<h2>Add_Friend 친구추가<a class="headerlink" href="#add-friend" title="Permalink to this headline">¶</a></h2>
+<p>친구 추가 API</p>
+<p>URL: /add_friend/</p>
+<p>Method: POST</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>현재는 임시로 바로 추가 가능하도록 구현함</em></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">요청 즉시 친구가 맺어짐</p>
+</div>
+<table border="1" class="docutils">
+<caption>Input Parameters</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>email</td>
+<td>user의 이메</td>
+</tr>
+<tr class="row-odd"><td>password</td>
+<td>비밀번호 (암호화된 비밀번호)</td>
+</tr>
+<tr class="row-even"><td>target</td>
+<td>상대방의 이메일</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Output</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Status</td>
+<td>1 성공, 2 인증실패, 3 input값 없음</td>
+</tr>
+<tr class="row-odd"><td>Log</td>
+<td>설명</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -60,12 +117,20 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Friend</a><ul>
+<li><a class="reference internal" href="#add-friend">Add_Friend 친구추가</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="auth.html"
                         title="previous chapter">Auth</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pick.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
+                        title="next chapter">Pick</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/friend.txt"
@@ -95,12 +160,12 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="pick.html" title="&lt;no title&gt;"
+          <a href="pick.html" title="Pick"
              >next</a> |</li>
         <li class="right" >
           <a href="auth.html" title="Auth"
              >previous</a> |</li>
-        <li><a href="index.html">TeethServer 0.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">TeethServer 0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

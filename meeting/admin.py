@@ -1,10 +1,11 @@
 from django.contrib import admin  
 from meeting.models import User
 
-#class UserAdmin(admin.ModelAdmin):
-	#fields = ('name', 'password', 'email')
+class UserAdmin(admin.ModelAdmin):
+  list_display = ('name', 'gender', 'email', 'chance','phone_num', 'candidate_num', 'candidate_now', 'arranger_now')
+  search_fields = ('user', )
 
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
 
 """
 from books.models import Publisher, Author, Book  
