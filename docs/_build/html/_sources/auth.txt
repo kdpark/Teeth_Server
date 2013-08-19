@@ -24,15 +24,24 @@ Method: POST
    :widths: 20 60
    :header-rows: 1
 
-   * - var
+   * - var 
      - description
-   * - username
-     - 이름
-   * - password
-     - 비밀번호 (암호화된 비밀번호를 보내기 바람)
+   * - opt
+     - 1 : normal, 2 : facebook 로그인
    * - email
      - 이메일 (양식체크 미리 해주기 바람)
-
+   * - password
+     - 비밀번호 (암호화된 비밀번호를 보내기 바람)
+   * - username
+     - 사용자 이름
+   * - gender
+     - 성별 (1:남자, 2:여자)
+   * - fb_id
+     - 페이스북 id key값
+   * - phone_num
+     - 전화번호
+   * - fb_friend
+     - 페이스북 친구목록 (아직은 추가 안됨)
 
 
 .. list-table:: Output
@@ -42,7 +51,7 @@ Method: POST
    * - var
      - description
    * - Status
-     - 1 성공, 2 이메일 중복, 3 input값 없음
+     - 1 성공, 2 이메일 중복, 3 input값 없음, 4 옵션값체
    * - Log
      - 설명
 
@@ -64,7 +73,7 @@ URL : /accounts/login/
    * - email
      - 이메일
    * - password
-     - 비밀번호 (암호화된 비밀번호를 보내기 바람)
+     - 비밀번호 (암호화된 비밀번호)
 
 
 .. list-table:: Output
