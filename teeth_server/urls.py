@@ -19,6 +19,7 @@ urlpatterns = patterns('',
   url(r'^add_friend/$', 'teeth_server.views.add_friend'),
   url(r'^pick_candidate/$', 'teeth_server.views.pick_candidate'),
   url(r'^new_cycle/$', 'teeth_server.views.new_cycle'),
+  url(r'^sync_friend/$', 'teeth_server.views.sync_friend'),
 
 
   # url(r'^invite/$', views.invite, name='invite'),

@@ -2,8 +2,8 @@ from django.db import models
 
 class User(models.Model):
   name = models.CharField(max_length=65)
-  password = models.TextField()
-  email = models.CharField(max_length=40, unique = True)
+  password = models.TextField(blank=True, null=True)
+  user_id = models.CharField(max_length=40, unique = True)
   GenderChoice = (
       (1, 'Male'),
       (2, 'Female')
@@ -11,7 +11,7 @@ class User(models.Model):
   gender = models.IntegerField(choices=GenderChoice, default=1, verbose_name='Gender')
   phone_num = models.CharField(max_length=15, blank=True, null=True)
   profile_pic = models.TextField(blank=True, null=True)
-  fb_id = models.CharField(max_length=15, blank=True, null=True)
+  fb_email = models.CharField(max_length=40, blank=True, null=True)
   DONECHOICE = (
       (1, 'ON'),
       (2, 'OFF')
@@ -35,4 +35,4 @@ class User(models.Model):
   meeting_deny = models.ManyToManyField('self', related_name = 'meeting_deny', blank=True, null=True)
 
   def __unicode__(self):
-    return "%s" % self.email
+    return "%s, %s" % (self.name, self.user_id)

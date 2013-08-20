@@ -24,7 +24,7 @@ def login(request):
   if (email=='' or password==''):
     return HttpResponse(simpleJson(4,'Error-Blank Form'))
 
-  target = User.objects.filter(email__exact=email)
+  target = User.objects.filter(user_id__exact=email)
   if target.count():
     #existing
     if target[0].password == password:
@@ -47,27 +47,55 @@ def signin(request):
   gender = request.POST.get('gender', '')
   fb_id = request.POST.get('fb_id', '')
   fb_friend = request.POST.get('fb_friend','')
+  fb_email = request.POST.get('fb_email','')
+  phone_contact = request.POST.get('phone_contact', '')
   phone_num = request.POST.get('phone_num', '')
 
   if option == '1': # normal sign in
     if (email=='' or username=='' or password=='' or gender=='' or phone_num==''):
       return HttpResponse(simpleJson(3,'Error-Blank Form'))
+    if User.objects.filter(user_id__exact=email).count():
+      return HttpResponse(simpleJson(2, 'Duplicated Email'))
+
+    newUser = User(name=username, password=password, user_id=email, gender=gender, phone_num=phone_num)
 
   elif option =='2': # facebook sign in
-    if (email=='' or username=='' or password=='' or gender=='' or fb_id==''):
+    if (email=='' or username=='' or gender=='' or fb_id==''):
       return HttpResponse(simpleJson(3,'Error-Blank Form'))
+    
+    newUser = User(name=username, user_id=fb_id, gender=gender, fb_email=fb_email, phone_num=phone_num)
+
   else:
     return HttpResponse(simpleJson(4, 'check your options'))
 
-  if User.objects.filter(email__exact=email).count():
-    return HttpResponse(simpleJson(2, 'Duplicated Email'))
-  
-  newUser = User(name=username, password=password, email=email, gender=gender, fb_id=fb_id, phone_num=phone_num)
   newUser.save()
 
+  # sync operation
+
   if fb_friend != '':
-    # friend add from facebook's friend
-    pass
+    # friend sync from facebook's friend
+    fb_friend_list = fb_friend.split(',')
+    for fb in fb_friend_list:
+      # friend is facebook id
+      try:
+        friend=User.objects.get(user_id=fb)
+      except DoesNotExist:
+        continue
+      
+      newUser.friend_ship.add(friend)
+
+
+  if phone_contact != '':
+    phone_contact_list = phone_contact.split(',')
+    for contact in phone_contact_list:
+      # friend is facebook id
+      try:
+        friend=User.objects.get(phone_num=contact)
+      except DoesNotExist:
+        continue
+      
+      newUser.friend_ship.add(friend)
+    
   return HttpResponse(simpleJson(1, 'Success sign'))
 
   
@@ -76,11 +104,10 @@ def main(request):
   # input : user id.
   # output : arranger_name, next_arranger_name, candidate_num
 
-  email = request.POST.get('email', '')
-  password = request.POST.get('password', '')
+  user_id = request.POST.get('user_id', '')
 
   try:
-    user = User.objects.get(email__exact=email, password__exact=password)
+    user = User.objects.get(user_id__exact=user_id)
   except DoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
@@ -119,11 +146,10 @@ def get_new_target(request):
     # save her to candidate
 
   # else arranger on:
-  email = request.POST.get('email', '')
-  password = request.POST.get('password', '')
+  user_id = request.POST.get('user_id', '')
 
   try:
-    user = User.objects.get(email__exact=email, password__exact=password)
+    user = User.objects.get(user_id__exact=user_id)
   except DoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
@@ -164,19 +190,18 @@ def add_friend(request):
   # auto add using facebook or phone_num (sync)
 
   # manually request
-  email = request.POST.get('email', '')
-  password = request.POST.get('password', '')
-  target_email = request.POST.get('target','')
+  user_id = request.POST.get('user_id', '')
+  target_user_id = request.POST.get('target','')
   
-  if target_email == '':
+  if target_user_id == '':
     HttpResponse(simpleJson(3, 'no target friend'))
 
   try:
-    user = User.objects.get(email__exact=email, password__exact=password)
+    user = User.objects.get(user_id__exact=user_id)
   except DoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
-  target_friend = User.objects.get(email=target_email)
+  target_friend = User.objects.get(user_id=target_user_id)
   user.friend_ship.add(target_friend)
 
   return HttpResponse(simpleJson(1, 'success'))
@@ -185,11 +210,10 @@ def pick_candidate(request):
   # get her number
   # and turn the chance OFF
 
-  email = request.POST.get('email', '')
-  password = request.POST.get('password', '')
+  user_id = request.POST.get('user_id', '')
 
   try:
-    user = User.objects.get(email__exact=email, password__exact=password)
+    user = User.objects.get(user_id__exact=user_id)
   except DoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
@@ -201,6 +225,42 @@ def pick_candidate(request):
   user.save()
 
   return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+
+def sync_friend(request):
+  user_id = request.POST.get('user_id', '')
+  fb_friend = request.POST.get('fb_friend','')
+  phone_contact = request.POST.get('phone_contact', '')
+
+  try:
+    user = User.objects.get(user_id__exact=user_id)
+  except DoesNotExist:
+    return HttpResponse(simpleJson(2, 'wrong user'))
+
+  if fb_friend != '':
+    # friend sync from facebook's friend
+    fb_friend_list = fb_friend.split(',')
+    for fb in fb_friend_list:
+      # friend is facebook id
+      try:
+        friend=User.objects.get(user_id=fb)
+      except DoesNotExist:
+        continue
+      
+      user.friend_ship.add(friend)
+
+
+  if phone_contact != '':
+    phone_contact_list = phone_contact.split(',')
+    for contact in phone_contact_list:
+      # friend is facebook id
+      try:
+        friend=User.objects.get(phone_num=contact)
+      except DoesNotExist:
+        continue
+      
+      user.friend_ship.add(friend)
+  return HttpResponse(simpleJson(1, 'success'))
+
 
 def new_cycle(request):
   # this funtion will only used by admin
