@@ -53,7 +53,9 @@
 <span id="ref-auth"></span><h1>Auth<a class="headerlink" href="#auth" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="signin">
 <h2>Signin 회원가입<a class="headerlink" href="#signin" title="Permalink to this headline">¶</a></h2>
-<p>회원가입 API</p>
+<p>회원가입 API
+회원 가입 시 phone_contact, fb_friend를 POST로 보내주면
+자동으로 친구목록이 동기화된다.</p>
 <p>URL: /accounts/signin/</p>
 <p>Method: POST</p>
 <div class="admonition note">
@@ -69,7 +71,7 @@
 <p class="last">URL 마지막을 / 로 닫아줘야한다.</p>
 </div>
 <table border="1" class="docutils">
-<caption>Input Parameters</caption>
+<caption>Input Parameters (option 1)</caption>
 <colgroup>
 <col width="25%" />
 <col width="75%" />
@@ -81,7 +83,7 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>opt</td>
-<td>1 : normal, 2 : facebook 로그인</td>
+<td>1 : normal Login (using email)</td>
 </tr>
 <tr class="row-odd"><td>email</td>
 <td>이메일 (양식체크 미리 해주기 바람)</td>
@@ -95,14 +97,49 @@
 <tr class="row-even"><td>gender</td>
 <td>성별 (1:남자, 2:여자)</td>
 </tr>
-<tr class="row-odd"><td>fb_id</td>
-<td>페이스북 id key값</td>
+<tr class="row-odd"><td>phone_num</td>
+<td>사용자의 전화번호</td>
 </tr>
-<tr class="row-even"><td>phone_num</td>
+<tr class="row-even"><td>phone_contact</td>
+<td>전화번호 주소록 목록 (csv형식, 공백없이!!) (ex: 01031311112,01094817411)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Input Parameters (Option 2)</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>opt</td>
+<td>2 : Facebook</td>
+</tr>
+<tr class="row-odd"><td>fb_id</td>
+<td>페이스북 key id (ex: 100001719640411)</td>
+</tr>
+<tr class="row-even"><td>fb_email</td>
+<td>페이스북 이메일 주소</td>
+</tr>
+<tr class="row-odd"><td>username</td>
+<td>사용자 이름</td>
+</tr>
+<tr class="row-even"><td>gender</td>
+<td>성별 (1:남자, 2:여자)</td>
+</tr>
+<tr class="row-odd"><td>phone_num</td>
 <td>전화번호</td>
 </tr>
+<tr class="row-even"><td>phone_contact</td>
+<td>전화번호 주소록 목록 (csv형식, 공백없이!!)</td>
+</tr>
 <tr class="row-odd"><td>fb_friend</td>
-<td>페이스북 친구목록 (아직은 추가 안됨)</td>
+<td>페이스북 친구목록 (역시 csv 형식) (ex: 10014121411,4112515155,125166611)</td>
 </tr>
 </tbody>
 </table>
@@ -119,7 +156,7 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Status</td>
-<td>1 성공, 2 이메일 중복, 3 input값 없음, 4 옵션값체</td>
+<td>1 성공, 2 이메일 중복, 3 input값 오류, 4 옵션값확인(1 or 2)</td>
 </tr>
 <tr class="row-odd"><td>Log</td>
 <td>설명</td>
@@ -129,7 +166,8 @@
 </div>
 <div class="section" id="login">
 <h2>Login<a class="headerlink" href="#login" title="Permalink to this headline">¶</a></h2>
-<p>로그인 API</p>
+<p>로그인 API
+페이스북은 이 절차 필요없이 제공되는 폼 쓰면 됨.</p>
 <p>URL : /accounts/login/</p>
 <table border="1" class="docutils">
 <caption>Input Parameters</caption>

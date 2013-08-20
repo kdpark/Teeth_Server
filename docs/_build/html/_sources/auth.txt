@@ -9,6 +9,8 @@ Signin 회원가입
 -----------------------
 
 회원가입 API
+회원 가입 시 phone_contact, fb_friend를 POST로 보내주면
+자동으로 친구목록이 동기화된다.
 
 URL: /accounts/signin/
 
@@ -20,14 +22,14 @@ Method: POST
 
 .. warning:: URL 마지막을 / 로 닫아줘야한다.
 
-.. list-table:: Input Parameters
+.. list-table:: Input Parameters (option 1)
    :widths: 20 60
    :header-rows: 1
 
    * - var 
      - description
    * - opt
-     - 1 : normal, 2 : facebook 로그인
+     - 1 : normal Login (using email)
    * - email
      - 이메일 (양식체크 미리 해주기 바람)
    * - password
@@ -36,12 +38,34 @@ Method: POST
      - 사용자 이름
    * - gender
      - 성별 (1:남자, 2:여자)
+   * - phone_num
+     - 사용자의 전화번호
+   * - phone_contact
+     - 전화번호 주소록 목록 (csv형식, 공백없이!!) (ex: 01031311112,01094817411)
+
+
+.. list-table:: Input Parameters (Option 2)
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var 
+     - description
+   * - opt
+     - 2 : Facebook
    * - fb_id
-     - 페이스북 id key값
+     - 페이스북 key id (ex: 100001719640411)
+   * - fb_email
+     - 페이스북 이메일 주소
+   * - username
+     - 사용자 이름
+   * - gender
+     - 성별 (1:남자, 2:여자)
    * - phone_num
      - 전화번호
+   * - phone_contact
+     - 전화번호 주소록 목록 (csv형식, 공백없이!!)
    * - fb_friend
-     - 페이스북 친구목록 (아직은 추가 안됨)
+     - 페이스북 친구목록 (역시 csv 형식) (ex: 10014121411,4112515155,125166611)
 
 
 .. list-table:: Output
@@ -51,7 +75,7 @@ Method: POST
    * - var
      - description
    * - Status
-     - 1 성공, 2 이메일 중복, 3 input값 없음, 4 옵션값체
+     - 1 성공, 2 이메일 중복, 3 input값 오류, 4 옵션값확인(1 or 2)
    * - Log
      - 설명
 
@@ -60,6 +84,7 @@ Login
 -----
 
 로그인 API
+페이스북은 이 절차 필요없이 제공되는 폼 쓰면 됨.
 
 URL : /accounts/login/
 

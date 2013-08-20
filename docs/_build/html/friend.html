@@ -54,7 +54,9 @@
 <p>친구 관계에 해당하는 모듈</p>
 <div class="section" id="add-friend">
 <h2>Add_Friend 친구추가<a class="headerlink" href="#add-friend" title="Permalink to this headline">¶</a></h2>
-<p>친구 추가 API</p>
+<p>소개슈머 자체 가입한 사람은 email로,
+facebook으로 가입한 사람은 페북key를 사용해서 강제로 친구를 맺게한다.
+beta 때 까지만 한시적으로 운영하는 함수</p>
 <p>URL: /add_friend/</p>
 <p>Method: POST</p>
 <div class="admonition note">
@@ -77,14 +79,11 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>email</td>
-<td>user의 이메</td>
+<tr class="row-even"><td>user_id</td>
+<td>페북사용자는 사용자key, 나머지는 이메일주소</td>
 </tr>
-<tr class="row-odd"><td>password</td>
-<td>비밀번호 (암호화된 비밀번호)</td>
-</tr>
-<tr class="row-even"><td>target</td>
-<td>상대방의 이메일</td>
+<tr class="row-odd"><td>target</td>
+<td>상대방의 이메일 또는 페북key값.</td>
 </tr>
 </tbody>
 </table>
@@ -109,6 +108,60 @@
 </tbody>
 </table>
 </div>
+<div class="section" id="sync-friend">
+<h2>Sync friend 친구추가<a class="headerlink" href="#sync-friend" title="Permalink to this headline">¶</a></h2>
+<p>전화번호 목록과 페북 친구 목록을 주면,
+현재 가입자목록과 비교하여 친구를 자동으로 맺게해준다.</p>
+<p>URL: /sync_friend/</p>
+<p>Method: POST</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">요청 즉시 수락 절차 없이 바로 친구가 맺어짐</p>
+</div>
+<table border="1" class="docutils">
+<caption>Input Parameters</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>user_id</td>
+<td>페북사용자는 사용자key, 나머지는 이메일주소</td>
+</tr>
+<tr class="row-odd"><td>fb_friend</td>
+<td>페북친구들의 key 목록 (csv 형식)</td>
+</tr>
+<tr class="row-even"><td>phone_contact</td>
+<td>전화번호 목록 (csv 형식, 회원가입 양식 참조)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Output</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Status</td>
+<td>1 성공, 2 인증실패</td>
+</tr>
+<tr class="row-odd"><td>Log</td>
+<td>설명</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -121,6 +174,7 @@
   <ul>
 <li><a class="reference internal" href="#">Friend</a><ul>
 <li><a class="reference internal" href="#add-friend">Add_Friend 친구추가</a></li>
+<li><a class="reference internal" href="#sync-friend">Sync friend 친구추가</a></li>
 </ul>
 </li>
 </ul>

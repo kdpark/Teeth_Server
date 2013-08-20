@@ -23,10 +23,8 @@ Method: POST
 
    * - var
      - description
-   * - email
-     - user의 이메일
-   * - password
-     - 비밀번호 (암호화된 비밀번호)
+   * - user_id
+     - 페북사용자는 사용자key, 나머지는 이메일주소
 
 
 
@@ -40,6 +38,8 @@ Method: POST
      - 1 성공, 2 잘못된 유저, 3 친구 모자람, 4 오늘의 chance 모두 소모
    * - Log
      - 메세지
+   * - Value
+     - 3 오류 시, 현재 친구 수를 리턴한다. 현재 3명미만은 3 오류를 유발시키게 구현되어있다.
    * - arranger_now
      - 주선자 이름
    * - arranger_now_pic
@@ -66,10 +66,8 @@ URL : /pick_candidate/
 
    * - var
      - description
-   * - email
-     - user의 이메일
-   * - password
-     - 비밀번호 (암호화된 비밀번호)
+   * - user_id
+     - 페북사용자는 사용자key, 나머지는 이메일주소
 
 
 .. list-table:: Output
@@ -81,7 +79,7 @@ URL : /pick_candidate/
    * - Status
      - 1 성공, 2 잘못된 사용자
    * - candidate_phone
-     - 후보자의 전화번
+     - 후보자의 전화번호
    * - candidate_pic
      - 후보자 사진
 
@@ -103,7 +101,7 @@ URL : /new_cycle/
    * - var
      - description
    * - adminid
-     - 트렐로 참고 (admin과 같)
+     - 트렐로 참고 (admin과 같음)
    * - password
      - 트렐로 참고할 것. (admin)
 
