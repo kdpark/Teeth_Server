@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext, Context, Template, loader
 from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import auth, admin
 from meeting.models import User
@@ -79,7 +80,7 @@ def signin(request):
       # friend is facebook id
       try:
         friend=User.objects.get(user_id=fb)
-      except DoesNotExist:
+      except ObjectDoesNotExist:
         continue
       
       newUser.friend_ship.add(friend)
@@ -91,7 +92,7 @@ def signin(request):
       # friend is facebook id
       try:
         friend=User.objects.get(phone_num=contact)
-      except DoesNotExist:
+      except ObjectDoesNotExist:
         continue
       
       newUser.friend_ship.add(friend)
@@ -108,7 +109,7 @@ def main(request):
 
   try:
     user = User.objects.get(user_id__exact=user_id)
-  except DoesNotExist:
+  except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   # if friend_num is under 5...
@@ -124,7 +125,7 @@ def main(request):
   try: # is there arranger ?
     arranger_now = User.objects.get(id=user.arranger_now.id)
     
-  except DoesNotExist: # there is no arranger info
+  except ObjectDoesNotExist: # there is no arranger info
     get_new_target(request)
     pass
 
@@ -150,7 +151,7 @@ def get_new_target(request):
 
   try:
     user = User.objects.get(user_id__exact=user_id)
-  except DoesNotExist:
+  except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   friend_list = User.objects.filter(friend_ship=user.id)
@@ -198,7 +199,7 @@ def add_friend(request):
 
   try:
     user = User.objects.get(user_id__exact=user_id)
-  except DoesNotExist:
+  except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   target_friend = User.objects.get(user_id=target_user_id)
@@ -214,7 +215,7 @@ def pick_candidate(request):
 
   try:
     user = User.objects.get(user_id__exact=user_id)
-  except DoesNotExist:
+  except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   c = {
@@ -233,7 +234,7 @@ def sync_friend(request):
 
   try:
     user = User.objects.get(user_id__exact=user_id)
-  except DoesNotExist:
+  except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   if fb_friend != '':
@@ -243,7 +244,7 @@ def sync_friend(request):
       # friend is facebook id
       try:
         friend=User.objects.get(user_id=fb)
-      except DoesNotExist:
+      except ObjectDoesNotExist:
         continue
       
       user.friend_ship.add(friend)
@@ -255,7 +256,7 @@ def sync_friend(request):
       # friend is facebook id
       try:
         friend=User.objects.get(phone_num=contact)
-      except DoesNotExist:
+      except ObjectDoesNotExist:
         continue
       
       user.friend_ship.add(friend)
