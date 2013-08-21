@@ -11,13 +11,21 @@ urlpatterns = patterns('',
   url(r'^hello/$', 'teeth_server.views.home'),
   url(r'^search-form/$', 'teeth_server.views.search_form'),
 
+  # auth
   url(r'^accounts/signin/$', 'teeth_server.views.signin'),
   url(r'^accounts/login/$', 'teeth_server.views.login'),
   
+  # main & friend
   url(r'^main/$', 'teeth_server.views.main'),
   url(r'^get_new_target/$', 'teeth_server.views.get_new_target'),
   url(r'^add_friend/$', 'teeth_server.views.add_friend'),
+  url(r'^view_my_friend/$', 'teeth_server.views.view_my_friend'),
+  url(r'^view_meeting_req/$', 'teeth_server.views.view_meeting_req'),
+  url(r'^view_friend_req/$', 'teeth_server.views.view_friend_req'),
+
   url(r'^pick_candidate/$', 'teeth_server.views.pick_candidate'),
+  
+  # function
   url(r'^new_cycle/$', 'teeth_server.views.new_cycle'),
   url(r'^sync_friend/$', 'teeth_server.views.sync_friend'),
 

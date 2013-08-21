@@ -50,14 +50,12 @@ Method: POST
 Sync friend 친구추가
 -----------------------
 
-전화번호 목록과 페북 친구 목록을 주면,
-현재 가입자목록과 비교하여 친구를 자동으로 맺게해준다.
+전화번호 목록과 페북 친구 목록을 전송해주면,
+현재 가입자목록과 비교하여 친구를 자동으로 맺게해줌.
 
 URL: /sync_friend/
 
 Method: POST
-
-.. warning:: 요청 즉시 수락 절차 없이 바로 친구가 맺어짐
 
 .. list-table:: Input Parameters
    :widths: 20 60

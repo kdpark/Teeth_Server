@@ -54,7 +54,8 @@
 <div class="section" id="signin">
 <h2>Signin 회원가입<a class="headerlink" href="#signin" title="Permalink to this headline">¶</a></h2>
 <p>회원가입 API
-회원 가입 시 phone_contact, fb_friend를 POST로 보내주면
+opt1 은 소개슈머 자체 가입, opt2는 페북을 이용한 가입.</p>
+<p>회원 가입 시 phone_contact, fb_friend를 POST로 보내주면
 자동으로 친구목록이 동기화된다.</p>
 <p>URL: /accounts/signin/</p>
 <p>Method: POST</p>
@@ -167,7 +168,7 @@
 <div class="section" id="login">
 <h2>Login<a class="headerlink" href="#login" title="Permalink to this headline">¶</a></h2>
 <p>로그인 API
-페이스북은 이 절차 필요없이 제공되는 폼 쓰면 됨.</p>
+페이스북은 이 절차 필요없이 페북 로그인만 성공한 후 바로 main으로 이동하면 된다.</p>
 <p>URL : /accounts/login/</p>
 <table border="1" class="docutils">
 <caption>Input Parameters</caption>

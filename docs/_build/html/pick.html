@@ -50,7 +50,7 @@
 <p>주선자와 소개팅 대상에 관련된 모듈</p>
 <div class="section" id="main-main">
 <h2>Main (main화면)<a class="headerlink" href="#main-main" title="Permalink to this headline">¶</a></h2>
-<p>main 화면에 필요한 정보를 리턴</p>
+<p>main 화면에 필요한 정보를 리턴한다.</p>
 <p>URL: /main/</p>
 <p>Method: POST</p>
 <table border="1" class="docutils">
@@ -89,7 +89,7 @@
 <td>메세지</td>
 </tr>
 <tr class="row-even"><td>Value</td>
-<td>3 오류 시, 현재 친구 수를 리턴한다. 현재 3명미만은 3 오류를 유발시키게 구현되어있다.</td>
+<td>3 오류 시, 현재 친구 수를 리턴한다. 현재 3명미만은 오류를 유발시키게 구현되어있다.</td>
 </tr>
 <tr class="row-odd"><td>arranger_now</td>
 <td>주선자 이름</td>
@@ -111,7 +111,7 @@
 </div>
 <div class="section" id="pick-candidate">
 <h2>Pick candidate (후보자 선택)<a class="headerlink" href="#pick-candidate" title="Permalink to this headline">¶</a></h2>
-<p>상대방을 선택</p>
+<p>상대방을 선택하는 API, 해당 사용자의 chance 를 OFF(2) 로 만들고 후보자의 전화번호를 리턴받아온다.</p>
 <p>URL : /pick_candidate/</p>
 <table border="1" class="docutils">
 <caption>Input Parameters</caption>
@@ -157,7 +157,8 @@
 <div class="section" id="new-cycle">
 <h2>New Cycle (새로운 상대방 찾기)<a class="headerlink" href="#new-cycle" title="Permalink to this headline">¶</a></h2>
 <p>이 API를 날리면, 모든 사용자에게 새로운 상대방을 매칭시켜준다.
-오후 10시 등, 정해진 시간에 날리면 됨.</p>
+오후 10시 등, 정해진 시간에 날리면 됨.
+어드민 id와 비번이 필요하다.</p>
 <p>URL : /new_cycle/</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>

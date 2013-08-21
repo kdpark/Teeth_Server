@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import auth, admin
+from django.db import connection
 from meeting.models import User
 import json
 import random
@@ -63,7 +64,9 @@ def signin(request):
   elif option =='2': # facebook sign in
     if (email=='' or username=='' or gender=='' or fb_id==''):
       return HttpResponse(simpleJson(3,'Error-Blank Form'))
-    
+    if User.objects.filter(user_id__exact=fb_id).count():
+      return HttpResponse(simpleJson(2, 'Duplicated id'))
+
     newUser = User(name=username, user_id=fb_id, gender=gender, fb_email=fb_email, phone_num=phone_num)
 
   else:
@@ -186,7 +189,6 @@ def get_new_target(request):
   user.save()
   return 1
 
-
 def add_friend(request):
   # auto add using facebook or phone_num (sync)
 
@@ -208,9 +210,9 @@ def add_friend(request):
   return HttpResponse(simpleJson(1, 'success'))
 
 def pick_candidate(request):
+  
   # get her number
-  # and turn the chance OFF
-
+  
   user_id = request.POST.get('user_id', '')
 
   try:
@@ -222,10 +224,134 @@ def pick_candidate(request):
         'Status' : 1, 'Log': 'success', \
         'candidate_phone': user.candidate_now.phone_num, 'candidate_pic': user.candidate_now.profile_pic
       }
+  #turn the chance OFF
   user.chance = 2
   user.save()
 
+  # send a request !
+
   return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+
+
+def view_my_friend(request):
+  user_id = request.POST.get('user_id', '')
+  try:
+    user = User.objects.get(user_id__exact=user_id)
+  except ObjectDoesNotExist:
+    return HttpResponse(simpleJson(2, 'wrong user'))
+
+  user_list = []
+  for idx, item in enumerate(user.friend_ship.all()):
+    # using item, get name and user_id
+    user_info = {
+                  'name': item.name, 'user_id': item.user_id, 'profile_pic':item.profile_pic
+                }
+    user_list.append(user_info)
+
+  c = {
+        'Status' : 1, 'Log': 'success', \
+        'my_friend_list': user_list , 'send_num' : idx+1
+      }
+
+  return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+
+def view_friend_req(request):
+  user_id = request.POST.get('user_id', '')
+  try:
+    user = User.objects.get(user_id__exact=user_id)
+  except ObjectDoesNotExist:
+    return HttpResponse(simpleJson(2, 'wrong user'))
+  
+  #hardcoding SQL
+  cursor = connection.cursor()
+  cursor.execute("select to_user_id from meeting_user_friend_req where from_user_id = %d" % (user.id))
+  to_user_id_set = list(cursor.fetchone())
+
+  user_list1 = []
+  for idx1, item in enumerate(to_user_id_set):
+    # using item, get name and user_id
+    senduser = User.objects.get(id=item)
+    user_info = {
+                  'name': senduser.name, 'user_id': senduser.user_id, 'profile_pic':senduser.profile_pic
+                }
+    user_list1.append(user_info)
+
+  #hardcoding SQL
+  cursor = connection.cursor()
+  cursor.execute("select from_user_id from meeting_user_friend_req where to_user_id = %d" % (user.id))
+  to_user_id_set = list(cursor.fetchone())
+
+  user_list2 = []
+  for idx2, item in enumerate(to_user_id_set):
+    # using item, get name and user_id
+    re_user = User.objects.get(id=item)
+    user_info = {
+                  'name': re_user.name, 'user_id': re_user.user_id, 'profile_pic':re_user.profile_pic
+                }
+    user_list2.append(user_info)
+
+  c = {
+        'Status' : 1, 'Log': 'success', \
+        'send_list': user_list1 , 'send_num' : idx1+1, \
+        'receive_list' : user_list2, 'receive_num' : idx2+1
+      }
+
+  return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+
+def view_meeting_req(request):
+  user_id = request.POST.get('user_id', '')
+  try:
+    user = User.objects.get(user_id__exact=user_id)
+  except ObjectDoesNotExist:
+    return HttpResponse(simpleJson(2, 'wrong user'))
+  
+  #hardcoding SQL
+  cursor = connection.cursor()
+  cursor.execute("select to_user_id from meeting_user_meeting_req where from_user_id = %d" % (user.id))
+  to_user_id_set = list(cursor.fetchone())
+
+  user_list1 = []
+  for idx1, item in enumerate(to_user_id_set):
+    # using item, get name and user_id
+    senduser = User.objects.get(id=item)
+    user_info = {
+                  'name': senduser.name, 'user_id': senduser.user_id, 'profile_pic':senduser.profile_pic
+                }
+    user_list1.append(user_info)
+
+  #hardcoding SQL
+  cursor = connection.cursor()
+  cursor.execute("select from_user_id from meeting_user_meeting_req where to_user_id = %d" % (user.id))
+  to_user_id_set = list(cursor.fetchone())
+
+  user_list2 = []
+  for idx2, item in enumerate(to_user_id_set):
+    # using item, get name and user_id
+    re_user = User.objects.get(id=item)
+    user_info = {
+                  'name': re_user.name, 'user_id': re_user.user_id, 'profile_pic':re_user.profile_pic
+                }
+    user_list2.append(user_info)
+
+  c = {
+        'Status' : 1, 'Log': 'success', \
+        'send_list': user_list1 , 'send_num' : idx1+1, \
+        'receive_list' : user_list2, 'receive_num' : idx2+1
+      }
+
+  return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+
+
+def save_ex_candadate(request):
+  # need more field. 
+  return 1
+
+def deny_req(request):
+  # meeting_deny
+  return 1
+
+
+
 
 def sync_friend(request):
   user_id = request.POST.get('user_id', '')
