@@ -232,7 +232,6 @@ def pick_candidate(request):
 
   return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
 
-
 def view_my_friend(request):
   user_id = request.POST.get('user_id', '')
   try:
@@ -250,7 +249,7 @@ def view_my_friend(request):
 
   c = {
         'Status' : 1, 'Log': 'success', \
-        'my_friend_list': user_list , 'send_num' : idx+1
+        'my_friend_list': user_list , 'friend_num' : idx+1
       }
 
   return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))

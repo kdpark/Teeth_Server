@@ -154,62 +154,6 @@ beta 때 까지만 한시적으로 운영하는 함수</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="id2">
-<h2>Add_Friend 친구추가<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>소개슈머 자체 가입한 사람은 email로,
-facebook으로 가입한 사람은 페북key를 사용해서 강제로 친구를 맺게한다.
-beta 때 까지만 한시적으로 운영하는 함수</p>
-<p>URL: /add_friend/</p>
-<p>Method: POST</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><em>현재는 임시로 바로 추가 가능하도록 구현함</em></p>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">요청 즉시 친구가 맺어짐</p>
-</div>
-<table border="1" class="docutils">
-<caption>Input Parameters</caption>
-<colgroup>
-<col width="25%" />
-<col width="75%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">var</th>
-<th class="head">description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>user_id</td>
-<td>페북사용자는 사용자key, 나머지는 이메일주소</td>
-</tr>
-<tr class="row-odd"><td>target</td>
-<td>상대방의 이메일 또는 페북key값.</td>
-</tr>
-</tbody>
-</table>
-<table border="1" class="docutils">
-<caption>Output</caption>
-<colgroup>
-<col width="25%" />
-<col width="75%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">var</th>
-<th class="head">description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Status</td>
-<td>1 성공, 2 인증실패, 3 input값 없음</td>
-</tr>
-<tr class="row-odd"><td>Log</td>
-<td>설명</td>
-</tr>
-</tbody>
-</table>
-</div>
 <div class="section" id="view-friend-required">
 <h2>View friend Required 친구요청<a class="headerlink" href="#view-friend-required" title="Permalink to this headline">¶</a></h2>
 <p>친구요청하거나 받은 모든 목록을 리턴한다. (소개팅 요청 모듈 아님)</p>
@@ -332,7 +276,6 @@ beta 때 까지만 한시적으로 운영하는 함수</p>
 <li><a class="reference internal" href="#">Friend</a><ul>
 <li><a class="reference internal" href="#add-friend">Add_Friend 친구추가</a></li>
 <li><a class="reference internal" href="#id1">내 친구 목록 보기</a></li>
-<li><a class="reference internal" href="#id2">Add_Friend 친구추가</a></li>
 <li><a class="reference internal" href="#view-friend-required">View friend Required 친구요청</a></li>
 <li><a class="reference internal" href="#sync-friend">Sync friend 친구추가</a></li>
 </ul>
