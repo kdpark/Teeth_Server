@@ -154,6 +154,57 @@
 </tbody>
 </table>
 </div>
+<div class="section" id="id1">
+<h2>소개팅 요청 목록 보기<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>상대방에게 요청한 소개팅이나, 사용자가 받은 모든 요청 목록을 리턴한다.</p>
+<p>URL : /view_meeting_req/</p>
+<table border="1" class="docutils">
+<caption>Input Parameters</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>user_id</td>
+<td>페북사용자는 사용자key, 나머지는 이메일주소</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Output</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Status</td>
+<td>1 성공, 2 잘못된 사용자</td>
+</tr>
+<tr class="row-odd"><td>send_list</td>
+<td>내가 보낸 소개팅 리스트 (&#8216;name&#8217;: 상대방이름, &#8216;user_id&#8217;: user id, &#8216;profile_pic&#8217;: 프사 주소)</td>
+</tr>
+<tr class="row-even"><td>send_num</td>
+<td>내가 보낸 소개팅 수</td>
+</tr>
+<tr class="row-odd"><td>receive_list</td>
+<td>내가 받은 소개팅 리스트 (&#8216;name&#8217;: 상대방이름, &#8216;user_id&#8217;: user id, &#8216;profile_pic&#8217;: 프사 주소)</td>
+</tr>
+<tr class="row-even"><td>receive_num</td>
+<td>내가 받은 소개팅 수</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="new-cycle">
 <h2>New Cycle (새로운 상대방 찾기)<a class="headerlink" href="#new-cycle" title="Permalink to this headline">¶</a></h2>
 <p>이 API를 날리면, 모든 사용자에게 새로운 상대방을 매칭시켜준다.
@@ -215,6 +266,7 @@
 <li><a class="reference internal" href="#">Pick</a><ul>
 <li><a class="reference internal" href="#main-main">Main (main화면)</a></li>
 <li><a class="reference internal" href="#pick-candidate">Pick candidate (후보자 선택)</a></li>
+<li><a class="reference internal" href="#id1">소개팅 요청 목록 보기</a></li>
 <li><a class="reference internal" href="#new-cycle">New Cycle (새로운 상대방 찾기)</a></li>
 </ul>
 </li>

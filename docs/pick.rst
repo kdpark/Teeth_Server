@@ -84,6 +84,41 @@ URL : /pick_candidate/
      - 후보자 사진
 
 
+소개팅 요청 목록 보기
+-----------------------------
+
+상대방에게 요청한 소개팅이나, 사용자가 받은 모든 요청 목록을 리턴한다.
+
+URL : /view_meeting_req/
+
+
+.. list-table:: Input Parameters
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var
+     - description
+   * - user_id
+     - 페북사용자는 사용자key, 나머지는 이메일주소
+
+
+.. list-table:: Output
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var
+     - description
+   * - Status
+     - 1 성공, 2 잘못된 사용자
+   * - send_list
+     - 내가 보낸 소개팅 리스트 ('name': 상대방이름, 'user_id': user id, 'profile_pic': 프사 주소)
+   * - send_num
+     - 내가 보낸 소개팅 수
+   * - receive_list
+     - 내가 받은 소개팅 리스트 ('name': 상대방이름, 'user_id': user id, 'profile_pic': 프사 주소)
+   * - receive_num
+     - 내가 받은 소개팅 수
+
 New Cycle (새로운 상대방 찾기)
 --------------------------------------
 
