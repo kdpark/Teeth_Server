@@ -28,8 +28,8 @@ Method: POST
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
    * - target
      - 상대방의 이메일 또는 페북key값.
 
@@ -63,8 +63,8 @@ Method: POST
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
 
 
 .. list-table:: Output
@@ -76,7 +76,7 @@ Method: POST
    * - Status
      - 1 성공, 2 인증실패
    * - my_friend_list
-     - 현재 친구 리스트 ('name': 친구이름, 'user_id': 친구 id, 'profile_pic': 프사 주소)
+     - 현재 친구 리스트 ('name': 친구이름, 'email': 친구 이메일, 'profile_pic': 프사 주소)
    * - friend_num
      - 친구 수
 
@@ -101,8 +101,8 @@ Method: POST
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
    * - target
      - 상대방의 이메일 또는 페북key값.
 
@@ -117,11 +117,11 @@ Method: POST
    * - Status
      - 1 성공, 2 인증실패, 3 input값 없음
    * - send_list
-     - 내가 보낸 친구요청 리스트 ('name': 상대방이름, 'user_id': user id, 'profile_pic': 프사 주소)
+     - 내가 보낸 친구요청 리스트 ('name': 상대방이름, 'email': 이메일 'profile_pic': 프사 주소)
    * - send_num
      - 내가 보낸 친구요청수
    * - receive_list
-     - 내가 받은 친구요청 리스트 ('name': 이름, 'user_id': user id, 'profile_pic': 프사 주소)
+     - 내가 받은 친구요청 리스트 ('name': 이름, 'email': 이메일, 'profile_pic': 프사 주소)
    * - receive_num
      - 내가 받은 친구요청수
 
@@ -145,8 +145,8 @@ Method: POST
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
    * - fb_friend
      - 페북친구들의 key 목록 (csv 형식)
    * - phone_contact

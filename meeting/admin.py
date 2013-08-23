@@ -2,7 +2,7 @@ from django.contrib import admin
 from meeting.models import User
 
 class UserAdmin(admin.ModelAdmin):
-  list_display = ('name', 'gender', 'user_id', 'chance','phone_num', 'candidate_num', 'candidate_now', 'arranger_now', 'fb_email')
+  list_display = ('name', 'gender', 'email', 'chance','phone_num', 'candidate_num', 'candidate_now', 'arranger_now', 'fb_id')
   search_fields = ('user', )
 
 admin.site.register(User, UserAdmin)

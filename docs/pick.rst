@@ -23,8 +23,8 @@ Method: POST
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
 
 
 
@@ -70,8 +70,8 @@ URL : /pick_candidate/
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
 
 
 .. list-table:: Output
@@ -104,8 +104,8 @@ URL : /deny_req/
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
    * - target_id
      - 나에게 소개팅 건 사람 (fb_id or email)
 
@@ -135,8 +135,8 @@ URL : /accept_req/
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
    * - target_id
      - 나에게 소개팅 건 사람 (fb_id or email)
 
@@ -165,8 +165,8 @@ URL : /view_meeting_req/
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
 
 
 .. list-table:: Output
@@ -178,15 +178,15 @@ URL : /view_meeting_req/
    * - Status
      - 1 성공, 2 잘못된 사용자
    * - send_list
-     - 내가 보낸 소개팅 리스트 ('name': 상대방이름, 'user_id': user id, 'profile_pic': 프사 주소)
+     - 내가 보낸 소개팅 리스트 ('name': 상대방이름, 'email': 이메일, 'profile_pic': 프사 주소)
    * - send_num
      - 내가 보낸 소개팅 수
    * - receive_list
-     - 내가 받은 소개팅 리스트 ('name': 상대방이름, 'user_id': user id, 'profile_pic': 프사 주소)
+     - 내가 받은 소개팅 리스트 ('name': 상대방이름, 'email': 이메일, 'profile_pic': 프사 주소)
    * - receive_num
      - 내가 받은 소개팅 수
    * - connect_list
-     - 이어진 소개팅 리스트 ('name': 상대방이름, 'user_id': user id, 'profile_pic': 프사 주소, 'phone_num': 전화번호)
+     - 이어진 소개팅 리스트 ('name': 상대방이름, 'email': 이메일, 'profile_pic': 프사 주소, 'phone_num': 전화번호)
    * - connect_num
      - 이어진 소개팅 수  
 
@@ -242,8 +242,8 @@ URL : /get_new_target/
 
    * - var
      - description
-   * - user_id
-     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - email
+     - 이메일주소
 
 
 .. list-table:: Output

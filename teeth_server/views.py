@@ -23,18 +23,18 @@ def login(request):
   
   if (email=='' or password==''):
     return HttpResponse(simpleJson(4,'Error-Blank Form'))
-
-  target = User.objects.filter(user_id__exact=email)
-  if target.count():
-    #existing
-    if target[0].password == password:
-      c = {'Status' : 1, 'Log': 'success', 'Value': target[0].id}
-      return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
-    else:
-      return HttpResponse(simpleJson(2, 'Wrong password'))
-  else:
+  
+  try:
+    target = User.objects.get(email__exact=email)
+  except ObjectDoesNotExist:
     return HttpResponse(simpleJson(3, 'The email is not in DB'))
-
+  
+  if target.password == password:
+    c = {'Status' : 1, 'Log': 'success', 'Value': target.id}
+    return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+  else:
+    return HttpResponse(simpleJson(2, 'Wrong password'))
+  
 
 def signin(request):
   # join module, Create User
@@ -54,18 +54,24 @@ def signin(request):
   if option == '1': # normal sign in
     if (email=='' or username=='' or password=='' or gender=='' or phone_num==''):
       return HttpResponse(simpleJson(3,'Error-Blank Form'))
-    if User.objects.filter(user_id__exact=email).count():
+    if User.objects.filter(email__exact=email).count():
       return HttpResponse(simpleJson(2, 'Duplicated Email'))
 
-    newUser = User(name=username, password=password, user_id=email, gender=gender, phone_num=phone_num)
+    newUser = User(name=username, password=password, email=email, gender=gender, phone_num=phone_num)
 
   elif option =='2': # facebook sign in
     if (email=='' or username=='' or gender=='' or fb_id==''):
       return HttpResponse(simpleJson(3,'Error-Blank Form'))
-    if User.objects.filter(user_id__exact=fb_id).count():
+    if User.objects.filter(email__exact=fb_email).count():
+      origin = User.objects.get(email=fb_email)
+
+      ####
+      ####
+      ## delete function -> remove cascading!!!!
+
       return HttpResponse(simpleJson(2, 'Duplicated id'))
 
-    newUser = User(name=username, user_id=fb_id, gender=gender, fb_email=fb_email, phone_num=phone_num)
+    newUser = User(name=username, email=fb_email, gender=gender, fb_id=fb_email, phone_num=phone_num)
 
   else:
     return HttpResponse(simpleJson(4, 'check your options'))
@@ -80,7 +86,7 @@ def signin(request):
     for fb in fb_friend_list:
       # friend is facebook id
       try:
-        friend=User.objects.get(user_id=fb)
+        friend=User.objects.get(email=fb)
       except ObjectDoesNotExist:
         continue
       
@@ -105,10 +111,10 @@ def main(request):
   # input : user id.
   # output : arranger_name, next_arranger_name, candidate_num
 
-  user_id = request.POST.get('user_id', '')
+  email = request.POST.get('email', '')
 
   try:
-    user = User.objects.get(user_id__exact=user_id)
+    user = User.objects.get(email__exact=email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
@@ -140,10 +146,10 @@ def main(request):
 
 def get_new_target(request):
 
-  user_id = request.POST.get('user_id', '')
+  email = request.POST.get('email', '')
 
   try:
-    user = User.objects.get(user_id__exact=user_id)
+    user = User.objects.get(email__exact=email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
@@ -186,28 +192,28 @@ def add_friend(request):
   # auto add using facebook or phone_num (sync)
 
   # manually request
-  user_id = request.POST.get('user_id', '')
-  target_user_id = request.POST.get('target','')
+  email = request.POST.get('email', '')
+  target_email = request.POST.get('target','')
   
-  if target_user_id == '':
+  if target_email == '':
     HttpResponse(simpleJson(3, 'no target friend'))
 
   try:
-    user = User.objects.get(user_id__exact=user_id)
+    user = User.objects.get(email__exact=email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
-  target_friend = User.objects.get(user_id=target_user_id)
+  target_friend = User.objects.get(email=target_email)
   user.friend_ship.add(target_friend)
 
   return HttpResponse(simpleJson(1, 'success'))
 
 
 def pick_candidate(request):
-  user_id = request.POST.get('user_id', '')
+  email = request.POST.get('email', '')
 
   try:
-    user = User.objects.get(user_id__exact=user_id)
+    user = User.objects.get(email__exact=email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
@@ -225,17 +231,17 @@ def pick_candidate(request):
 
 
 def view_my_friend(request):
-  user_id = request.POST.get('user_id', '')
+  email = request.POST.get('email', '')
   try:
-    user = User.objects.get(user_id__exact=user_id)
+    user = User.objects.get(email__exact=email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   user_list = []
   for idx, item in enumerate(user.friend_ship.all()):
-    # using item, get name and user_id
+    # using item, get name and email
     user_info = {
-                  'name': item.name, 'user_id': item.user_id, 'profile_pic':item.profile_pic
+                  'name': item.name, 'email': item.email, 'profile_pic':item.profile_pic
                 }
     user_list.append(user_info)
 
@@ -248,37 +254,29 @@ def view_my_friend(request):
 
 
 def view_friend_req(request):
-  user_id = request.POST.get('user_id', '')
+  email = request.POST.get('email', '')
   try:
-    user = User.objects.get(user_id__exact=user_id)
+    user = User.objects.get(email__exact=email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
   
-  #hardcoding SQL
-  cursor = connection.cursor()
-  cursor.execute("select to_user_id from meeting_user_friend_req where from_user_id = %d" % (user.id))
-  to_user_id_set = list(cursor.fetchone())
-
-  user_list1 = []
-  for idx1, item in enumerate(to_user_id_set):
-    # using item, get name and user_id
+  # my send user list (get to_user using from_user)
+  user_list1=user.friend_req.all()
+  for idx1, item in enumerate(to_email_set):
+    # using item, get name and email
     senduser = User.objects.get(id=item)
     user_info = {
-                  'name': senduser.name, 'user_id': senduser.user_id, 'profile_pic':senduser.profile_pic
+                  'name': senduser.name, 'email': senduser.email, 'profile_pic':senduser.profile_pic
                 }
     user_list1.append(user_info)
 
-  #hardcoding SQL
-  cursor = connection.cursor()
-  cursor.execute("select from_user_id from meeting_user_friend_req where to_user_id = %d" % (user.id))
-  to_user_id_set = list(cursor.fetchone())
-
-  user_list2 = []
-  for idx2, item in enumerate(to_user_id_set):
-    # using item, get name and user_id
+  # my receive user list (get from_user using to_user=me)
+  user_list2 = User.objects.filter(friend_req__id=user.id)
+  for idx2, item in enumerate(to_email_set):
+    # using item, get name and email
     re_user = User.objects.get(id=item)
     user_info = {
-                  'name': re_user.name, 'user_id': re_user.user_id, 'profile_pic':re_user.profile_pic
+                  'name': re_user.name, 'email': re_user.email, 'profile_pic':re_user.profile_pic
                 }
     user_list2.append(user_info)
 
@@ -292,37 +290,29 @@ def view_friend_req(request):
 
 
 def view_meeting_req(request):
-  user_id = request.POST.get('user_id', '')
+  email = request.POST.get('email', '')
   try:
-    user = User.objects.get(user_id__exact=user_id)
+    user = User.objects.get(email__exact=email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
   
-  #hardcoding SQL
-  cursor = connection.cursor()
-  cursor.execute("select to_user_id from meeting_user_meeting_req where from_user_id = %d" % (user.id))
-  to_user_id_set = list(cursor.fetchone())
-
-  user_list1 = []
-  for idx1, item in enumerate(to_user_id_set):
-    # using item, get name and user_id
+  # my send list
+  user_list1=user.meeting_req.all()
+  for idx1, item in enumerate(to_email_set):
+    # using item, get name and email
     senduser = User.objects.get(id=item)
     user_info = {
-                  'name': senduser.name, 'user_id': senduser.user_id, 'profile_pic':senduser.profile_pic
+                  'name': senduser.name, 'email': senduser.email, 'profile_pic':senduser.profile_pic
                 }
     user_list1.append(user_info)
 
-  #hardcoding SQL
-  cursor = connection.cursor()
-  cursor.execute("select from_user_id from meeting_user_meeting_req where to_user_id = %d" % (user.id))
-  to_user_id_set = list(cursor.fetchone())
-
-  user_list2 = []
-  for idx2, item in enumerate(to_user_id_set):
-    # using item, get name and user_id
+  # my receive user list (get from_user using to_user=me)
+  user_list2 = User.objects.filter(meeting_req__id=user.id)
+  for idx2, item in enumerate(to_email_set):
+    # using item, get name and email
     re_user = User.objects.get(id=item)
     user_info = {
-                  'name': re_user.name, 'user_id': re_user.user_id, 'profile_pic':re_user.profile_pic
+                  'name': re_user.name, 'email': re_user.email, 'profile_pic':re_user.profile_pic
                 }
     user_list2.append(user_info)
 
@@ -337,16 +327,16 @@ def view_meeting_req(request):
 
 def deny_req(request):
   # meeting_deny
-  user_id = request.POST.get('user_id', '')
-  target_id = request.POST.get('target_id','')
+  email = request.POST.get('email', '')
+  target_email = request.POST.get('target_email','')
   try:
-    user = User.objects.get(user_id__exact=user_id)
-    target = User.objects.get(user_id__exact=target_id)
+    user = User.objects.get(email__exact=email)
+    target = User.objects.get(email__exact=target_email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   try:
-    target = User.meeting_req.get(id=target_id.id)
+    target = User.meeting_req.get(id=target_email.id)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(3, 'not requested'))
 
@@ -357,16 +347,16 @@ def deny_req(request):
 
 
 def accept_req(request):
-  user_id = request.POST.get('user_id', '')
-  target_id = request.POST.get('target_id','')
+  email = request.POST.get('email', '')
+  target_email = request.POST.get('target_email','')
   try:
-    user = User.objects.get(user_id__exact=user_id)
-    target = User.objects.get(user_id__exact=target_id)
+    user = User.objects.get(email__exact=email)
+    target = User.objects.get(email__exact=target_email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   try:
-    target = User.meeting_req.get(id=target_id.id)
+    target = User.meeting_req.get(id=target_email.id)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(3, 'not requested'))
 
@@ -377,12 +367,12 @@ def accept_req(request):
 
 
 def sync_friend(request):
-  user_id = request.POST.get('user_id', '')
+  email = request.POST.get('email', '')
   fb_friend = request.POST.get('fb_friend','')
   phone_contact = request.POST.get('phone_contact', '')
 
   try:
-    user = User.objects.get(user_id__exact=user_id)
+    user = User.objects.get(email__exact=email)
   except ObjectDoesNotExist:
     return HttpResponse(simpleJson(2, 'wrong user'))
 
@@ -392,7 +382,7 @@ def sync_friend(request):
     for fb in fb_friend_list:
       # friend is facebook id
       try:
-        friend=User.objects.get(user_id=fb)
+        friend=User.objects.get(fb_id=fb)
       except ObjectDoesNotExist:
         continue
       
@@ -420,7 +410,7 @@ def new_cycle(request):
   email = request.POST.get('adminid', '')
   password = request.POST.get('password', '')
 
-  if email=='teeth' and password=='xltm0630@':
+  if email!='teeth' or password!='xltm0630@':
     return HttpResponse(simpleJson(2, 'access deny'))
 
   for user in User.objects.all():
