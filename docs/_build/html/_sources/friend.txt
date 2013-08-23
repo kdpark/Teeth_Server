@@ -31,7 +31,7 @@ Method: POST
    * - email
      - 이메일주소
    * - target
-     - 상대방의 이메일 또는 페북key값.
+     - 상대방의 이메일
 
 
 
@@ -104,7 +104,7 @@ Method: POST
    * - email
      - 이메일주소
    * - target
-     - 상대방의 이메일 또는 페북key값.
+     - 상대방의 이메일
 
 
 
