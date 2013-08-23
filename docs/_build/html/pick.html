@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Pick &mdash; TeethServer 0.7 documentation</title>
+    <title>Pick &mdash; TeethServer 0.83 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.7',
+        VERSION:     '0.83',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="TeethServer 0.7 documentation" href="index.html" />
+    <link rel="top" title="TeethServer 0.83 documentation" href="index.html" />
     <link rel="prev" title="Friend" href="friend.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="friend.html" title="Friend"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">TeethServer 0.7 documentation</a> &raquo;</li> 
+        <li><a href="index.html">TeethServer 0.83 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -111,7 +111,9 @@
 </div>
 <div class="section" id="pick-candidate">
 <h2>Pick candidate (후보자 선택)<a class="headerlink" href="#pick-candidate" title="Permalink to this headline">¶</a></h2>
-<p>상대방을 선택하는 API, 해당 사용자의 chance 를 OFF(2) 로 만들고 후보자의 전화번호를 리턴받아온다.</p>
+<p>상대방을 선택하는 API, 해당 사용자의 chance 를 OFF(2) 로 만들고 후보자의 프로필을 볼 수 있다. (프로필 리턴은 개발 중)</p>
+<p>그리고 다음 랜덤 선택 시 뽑히지 않도록 별도의 테이블에 저장한다.</p>
+<p>그리고 이 API 성공 후 부터, User는 본인이 보낸 소개팅 목록을 확인할 수 있다. 또한, 상대방 역시 본인에게 온 소개팅 요청을 찾아볼 수 있다. (view_meeting_req 참고)</p>
 <p>URL : /pick_candidate/</p>
 <table border="1" class="docutils">
 <caption>Input Parameters</caption>
@@ -145,18 +147,104 @@
 <tr class="row-even"><td>Status</td>
 <td>1 성공, 2 잘못된 사용자</td>
 </tr>
-<tr class="row-odd"><td>candidate_phone</td>
-<td>후보자의 전화번호</td>
+<tr class="row-odd"><td>candidate_profile</td>
+<td>후보자의 프로필 (개발 중)</td>
 </tr>
-<tr class="row-even"><td>candidate_pic</td>
+<tr class="row-even"><td>candidate_pic (개발 중)</td>
 <td>후보자 사진</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="deny-req">
+<h2>Deny Req (소개팅 거부하기)<a class="headerlink" href="#deny-req" title="Permalink to this headline">¶</a></h2>
+<p>요청받은 소개팅을 거절하는 기능이다.</p>
+<p>나에게 온 meeting_req 목록을 없애버린다.</p>
+<p>URL : /deny_req/</p>
+<table border="1" class="docutils">
+<caption>Input Parameters</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>user_id</td>
+<td>페북사용자는 사용자key, 나머지는 이메일주소</td>
+</tr>
+<tr class="row-odd"><td>target_id</td>
+<td>나에게 소개팅 건 사람 (fb_id or email)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Output</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Status</td>
+<td>1 성공, 2 잘못된 사용자, 3 나에게 소개팅 걸지 않았음</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="accept-req">
+<h2>Accept Req (소개팅 수락하기)<a class="headerlink" href="#accept-req" title="Permalink to this headline">¶</a></h2>
+<p>요청받은 소개팅을 수락하는 기능이다.</p>
+<p>나에게 온 meeting_req 목록을 없애고, 수락 목록에 올린다.</p>
+<p>URL : /accept_req/</p>
+<table border="1" class="docutils">
+<caption>Input Parameters</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>user_id</td>
+<td>페북사용자는 사용자key, 나머지는 이메일주소</td>
+</tr>
+<tr class="row-odd"><td>target_id</td>
+<td>나에게 소개팅 건 사람 (fb_id or email)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Output</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Status</td>
+<td>1 성공, 2 잘못된 사용자, 3 나에게 소개팅 걸지 않았음</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="id1">
 <h2>소개팅 요청 목록 보기<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>상대방에게 요청한 소개팅이나, 사용자가 받은 모든 요청 목록을 리턴한다.</p>
+<p>사용자가 상대방에게 요청한 소개팅이나, 사용자가 받은 모든 요청 목록을 리턴한다. 또한 소개팅이 이어진 경우에 대한 리턴도 여기서 처리함.</p>
 <p>URL : /view_meeting_req/</p>
 <table border="1" class="docutils">
 <caption>Input Parameters</caption>
@@ -202,14 +290,20 @@
 <tr class="row-even"><td>receive_num</td>
 <td>내가 받은 소개팅 수</td>
 </tr>
+<tr class="row-odd"><td>connect_list</td>
+<td>이어진 소개팅 리스트 (&#8216;name&#8217;: 상대방이름, &#8216;user_id&#8217;: user id, &#8216;profile_pic&#8217;: 프사 주소, &#8216;phone_num&#8217;: 전화번호)</td>
+</tr>
+<tr class="row-even"><td>connect_num</td>
+<td>이어진 소개팅 수</td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="new-cycle">
 <h2>New Cycle (새로운 상대방 찾기)<a class="headerlink" href="#new-cycle" title="Permalink to this headline">¶</a></h2>
-<p>이 API를 날리면, 모든 사용자에게 새로운 상대방을 매칭시켜준다.
-오후 10시 등, 정해진 시간에 날리면 됨.
-어드민 id와 비번이 필요하다.</p>
+<p>이 API를 날리면, 모든 사용자에게 새로운 상대방을 매칭시켜준다. 그리고 모든 사용자의 Chance 를 On 으로 바꿔준다.</p>
+<p>오후 10시 등, 정해진 시간에 날리면 됨.</p>
+<p>어드민 id와 비번이 필요하다.</p>
 <p>URL : /new_cycle/</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -253,6 +347,50 @@
 </tbody>
 </table>
 </div>
+<div class="section" id="chance">
+<h2>특정 유저용, 새로운 상대방 찾기 &amp; Chance제공<a class="headerlink" href="#chance" title="Permalink to this headline">¶</a></h2>
+<p>이 API를 날린, 특정 사용자에게만 새로운 상대방을 불러와서 DB에 반영시킨다.</p>
+<p>또한 chance 를 항상 ON 으로 만들어준다.</p>
+<p>URL : /get_new_target/</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">API 성공 시, 기존에 있던 상대방 후보자는 새로운 후보자로 대체된다.</p>
+</div>
+<table border="1" class="docutils">
+<caption>Input Parameters</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>user_id</td>
+<td>페북사용자는 사용자key, 나머지는 이메일주소</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<caption>Output</caption>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">var</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Status</td>
+<td>1 성공, 2 잘못된 사용자, 3 친구부족, 4 성공</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -266,8 +404,11 @@
 <li><a class="reference internal" href="#">Pick</a><ul>
 <li><a class="reference internal" href="#main-main">Main (main화면)</a></li>
 <li><a class="reference internal" href="#pick-candidate">Pick candidate (후보자 선택)</a></li>
+<li><a class="reference internal" href="#deny-req">Deny Req (소개팅 거부하기)</a></li>
+<li><a class="reference internal" href="#accept-req">Accept Req (소개팅 수락하기)</a></li>
 <li><a class="reference internal" href="#id1">소개팅 요청 목록 보기</a></li>
 <li><a class="reference internal" href="#new-cycle">New Cycle (새로운 상대방 찾기)</a></li>
+<li><a class="reference internal" href="#chance">특정 유저용, 새로운 상대방 찾기 &amp; Chance제공</a></li>
 </ul>
 </li>
 </ul>
@@ -306,7 +447,7 @@
         <li class="right" >
           <a href="friend.html" title="Friend"
              >previous</a> |</li>
-        <li><a href="index.html">TeethServer 0.7 documentation</a> &raquo;</li> 
+        <li><a href="index.html">TeethServer 0.83 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

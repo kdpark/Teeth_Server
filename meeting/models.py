@@ -27,12 +27,13 @@ class User(models.Model):
   candidate_next = models.ForeignKey('self', related_name='fk_candidate_next', blank = True, null=True)
 
   friend_ship = models.ManyToManyField('self', related_name = 'user_friendship', blank = True, symmetrical = True)
-  friend_req = models.ManyToManyField('self', related_name = 'user_friendreq', blank = True, null=True)
-  friend_approved = models.ManyToManyField('self', related_name = 'user_approved', blank = True, null=True)
+  friend_req = models.ManyToManyField('self', related_name = 'user_friendreq', blank = True, null=True, symmetrical = False)
+  
+  ex_candidate = models.ManyToManyField('self', related_name = 'fk_ex_candidate', blank = True, null=True, symmetrical = False)
 
-  meeting_req = models.ManyToManyField('self', related_name= 'meeting_req', blank=True, null=True)
-  meeting_app = models.ManyToManyField('self', related_name = 'meeting_app', blank=True, null=True)
-  meeting_deny = models.ManyToManyField('self', related_name = 'meeting_deny', blank=True, null=True)
+  meeting_req = models.ManyToManyField('self', related_name= 'fk_meeting_req', blank=True, null=True, symmetrical = False)
+  meeting_app = models.ManyToManyField('self', related_name = 'fk_meeting_app', blank=True, null=True, symmetrical = False)
+  meeting_deny = models.ManyToManyField('self', related_name = 'fk_meeting_deny', blank=True, null=True, symmetrical = False)
 
   def __unicode__(self):
     return "%s, %s" % (self.name, self.user_id)

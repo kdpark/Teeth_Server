@@ -12,12 +12,10 @@ import random
 def home(request):
   return HttpResponse("Hello, This is Teeth!!")
 
-def search_form(request):
-  return render_to_response('search_form.html')
-
 def simpleJson(num, msg):
   c = {'Status' : num, 'Log': msg}
   return json.dumps(c, indent=4, separators = (',', ':'))
+
 
 def login(request):
   email = request.POST.get('email', '')
@@ -102,7 +100,6 @@ def signin(request):
     
   return HttpResponse(simpleJson(1, 'Success sign'))
 
-  
 
 def main(request):
   # input : user id.
@@ -143,13 +140,6 @@ def main(request):
 
 def get_new_target(request):
 
-  # if arranger blank:
-    # pick random my friend
-    # save him to arranger
-    # pick random his other gender friend
-    # save her to candidate
-
-  # else arranger on:
   user_id = request.POST.get('user_id', '')
 
   try:
@@ -158,7 +148,9 @@ def get_new_target(request):
     return HttpResponse(simpleJson(2, 'wrong user'))
 
   friend_list = User.objects.filter(friend_ship=user.id)
-
+  if friend_list.count() < 3:
+    c = {'Status' : 3, 'Log': 'You need more friends', 'Value': friend_list.count()}
+    return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
   # upgrade plan :: search friend_list, which has one more friend with target_gender
   # upgrade plan :: and then, select one as arranger, then, select his friend as candidate
 
@@ -170,8 +162,8 @@ def get_new_target(request):
   for friend in friend_list:
     output += User.objects.filter(friend_ship=friend.id, gender=target_gender).exclude(friend_ship=user.id)
 
-  # remove duplicate
-  output = list(set(output))
+  # remove duplicate & ex_candidate
+  output = list(set(output) - set(user.ex_candidate.all()))
   candidate_num = len(output)
 
   # no candidate!
@@ -188,6 +180,7 @@ def get_new_target(request):
   user.candidate_num = candidate_num
   user.save()
   return 1
+
 
 def add_friend(request):
   # auto add using facebook or phone_num (sync)
@@ -209,10 +202,8 @@ def add_friend(request):
 
   return HttpResponse(simpleJson(1, 'success'))
 
+
 def pick_candidate(request):
-  
-  # get her number
-  
   user_id = request.POST.get('user_id', '')
 
   try:
@@ -222,15 +213,16 @@ def pick_candidate(request):
 
   c = {
         'Status' : 1, 'Log': 'success', \
-        'candidate_phone': user.candidate_now.phone_num, 'candidate_pic': user.candidate_now.profile_pic
+        'candidate_profile': 'developing now', 'candidate_pic': user.candidate_now.profile_pic
       }
   #turn the chance OFF
   user.chance = 2
   user.save()
-
-  # send a request !
-
+  # send a request !, this is asymmetric relationship.
+  user.meeting_req.add(user.candidate_now)
+  user.ex_candidate.add(user.candidate_now)
   return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+
 
 def view_my_friend(request):
   user_id = request.POST.get('user_id', '')
@@ -253,6 +245,7 @@ def view_my_friend(request):
       }
 
   return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+
 
 def view_friend_req(request):
   user_id = request.POST.get('user_id', '')
@@ -296,6 +289,7 @@ def view_friend_req(request):
       }
 
   return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
+
 
 def view_meeting_req(request):
   user_id = request.POST.get('user_id', '')
@@ -341,15 +335,45 @@ def view_meeting_req(request):
   return HttpResponse(json.dumps(c, indent=4, separators = (',', ':')))
 
 
-def save_ex_candadate(request):
-  # need more field. 
-  return 1
-
 def deny_req(request):
   # meeting_deny
-  return 1
+  user_id = request.POST.get('user_id', '')
+  target_id = request.POST.get('target_id','')
+  try:
+    user = User.objects.get(user_id__exact=user_id)
+    target = User.objects.get(user_id__exact=target_id)
+  except ObjectDoesNotExist:
+    return HttpResponse(simpleJson(2, 'wrong user'))
+
+  try:
+    target = User.meeting_req.get(id=target_id.id)
+  except ObjectDoesNotExist:
+    return HttpResponse(simpleJson(3, 'not requested'))
+
+  target.meeting_req.remove(user)
+  user.meeting_deny.add(target)
+
+  return HttpResponse(simpleJson(1, 'success'))
 
 
+def accept_req(request):
+  user_id = request.POST.get('user_id', '')
+  target_id = request.POST.get('target_id','')
+  try:
+    user = User.objects.get(user_id__exact=user_id)
+    target = User.objects.get(user_id__exact=target_id)
+  except ObjectDoesNotExist:
+    return HttpResponse(simpleJson(2, 'wrong user'))
+
+  try:
+    target = User.meeting_req.get(id=target_id.id)
+  except ObjectDoesNotExist:
+    return HttpResponse(simpleJson(3, 'not requested'))
+
+  target.meeting_req.remove(user)
+  user.meeting_app.add(target)
+
+  return HttpResponse(simpleJson(1, 'success'))
 
 
 def sync_friend(request):
@@ -421,8 +445,8 @@ def new_cycle(request):
     for friend in friend_list:
       output += User.objects.filter(friend_ship=friend.id, gender=target_gender).exclude(friend_ship=user.id)
 
-    # remove duplicate
-    output = list(set(output))
+    # remove duplicate & ex_candidate
+    output = list(set(output) - set(user.ex_candidate.all()))
     candidate_num = len(output)
 
     # no candidate!

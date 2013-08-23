@@ -55,7 +55,11 @@ Method: POST
 Pick candidate (후보자 선택)
 -----------------------------
 
-상대방을 선택하는 API, 해당 사용자의 chance 를 OFF(2) 로 만들고 후보자의 전화번호를 리턴받아온다.
+상대방을 선택하는 API, 해당 사용자의 chance 를 OFF(2) 로 만들고 후보자의 프로필을 볼 수 있다. (프로필 리턴은 개발 중)
+
+그리고 다음 랜덤 선택 시 뽑히지 않도록 별도의 테이블에 저장한다.
+
+그리고 이 API 성공 후 부터, User는 본인이 보낸 소개팅 목록을 확인할 수 있다. 또한, 상대방 역시 본인에게 온 소개팅 요청을 찾아볼 수 있다. (view_meeting_req 참고)
 
 URL : /pick_candidate/
 
@@ -78,16 +82,79 @@ URL : /pick_candidate/
      - description
    * - Status
      - 1 성공, 2 잘못된 사용자
-   * - candidate_phone
-     - 후보자의 전화번호
-   * - candidate_pic
+   * - candidate_profile
+     - 후보자의 프로필 (개발 중)
+   * - candidate_pic (개발 중)
      - 후보자 사진
+
+
+Deny Req (소개팅 거부하기)
+-----------------------------
+
+요청받은 소개팅을 거절하는 기능이다. 
+
+나에게 온 meeting_req 목록을 없애버린다.
+
+URL : /deny_req/
+
+
+.. list-table:: Input Parameters
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var
+     - description
+   * - user_id
+     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - target_id
+     - 나에게 소개팅 건 사람 (fb_id or email)
+
+.. list-table:: Output
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var
+     - description
+   * - Status
+     - 1 성공, 2 잘못된 사용자, 3 나에게 소개팅 걸지 않았음
+
+
+Accept Req (소개팅 수락하기)
+-----------------------------
+
+요청받은 소개팅을 수락하는 기능이다. 
+
+나에게 온 meeting_req 목록을 없애고, 수락 목록에 올린다.
+
+URL : /accept_req/
+
+
+.. list-table:: Input Parameters
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var
+     - description
+   * - user_id
+     - 페북사용자는 사용자key, 나머지는 이메일주소
+   * - target_id
+     - 나에게 소개팅 건 사람 (fb_id or email)
+
+.. list-table:: Output
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var
+     - description
+   * - Status
+     - 1 성공, 2 잘못된 사용자, 3 나에게 소개팅 걸지 않았음
+
 
 
 소개팅 요청 목록 보기
 -----------------------------
 
-상대방에게 요청한 소개팅이나, 사용자가 받은 모든 요청 목록을 리턴한다.
+사용자가 상대방에게 요청한 소개팅이나, 사용자가 받은 모든 요청 목록을 리턴한다. 또한 소개팅이 이어진 경우에 대한 리턴도 여기서 처리함.
 
 URL : /view_meeting_req/
 
@@ -118,12 +185,18 @@ URL : /view_meeting_req/
      - 내가 받은 소개팅 리스트 ('name': 상대방이름, 'user_id': user id, 'profile_pic': 프사 주소)
    * - receive_num
      - 내가 받은 소개팅 수
+   * - connect_list
+     - 이어진 소개팅 리스트 ('name': 상대방이름, 'user_id': user id, 'profile_pic': 프사 주소, 'phone_num': 전화번호)
+   * - connect_num
+     - 이어진 소개팅 수  
 
 New Cycle (새로운 상대방 찾기)
 --------------------------------------
 
-이 API를 날리면, 모든 사용자에게 새로운 상대방을 매칭시켜준다.
+이 API를 날리면, 모든 사용자에게 새로운 상대방을 매칭시켜준다. 그리고 모든 사용자의 Chance 를 On 으로 바꿔준다.
+
 오후 10시 등, 정해진 시간에 날리면 됨.
+
 어드민 id와 비번이 필요하다.
 
 URL : /new_cycle/
@@ -151,3 +224,33 @@ URL : /new_cycle/
    * - Status
      - 1 성공, 2 잘못된 사용자
 
+
+특정 유저용, 새로운 상대방 찾기 & Chance제공
+----------------------------------------------------
+
+이 API를 날린, 특정 사용자에게만 새로운 상대방을 불러와서 DB에 반영시킨다.
+
+또한 chance 를 항상 ON 으로 만들어준다.
+
+URL : /get_new_target/
+
+.. warning:: API 성공 시, 기존에 있던 상대방 후보자는 새로운 후보자로 대체된다.
+
+.. list-table:: Input Parameters
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var
+     - description
+   * - user_id
+     - 페북사용자는 사용자key, 나머지는 이메일주소
+
+
+.. list-table:: Output
+   :widths: 20 60
+   :header-rows: 1
+
+   * - var
+     - description
+   * - Status
+     - 1 성공, 2 잘못된 사용자, 3 친구부족, 4 성공
