@@ -71,7 +71,7 @@ def signin(request):
 
       return HttpResponse(simpleJson(2, 'Duplicated id'))
 
-    newUser = User(name=username, email=fb_email, gender=gender, fb_id=fb_email, phone_num=phone_num)
+    newUser = User(name=username, email=fb_email, gender=gender, fb_id=fb_id, phone_num=phone_num)
 
   else:
     return HttpResponse(simpleJson(4, 'check your options'))
@@ -86,7 +86,7 @@ def signin(request):
     for fb in fb_friend_list:
       # friend is facebook id
       try:
-        friend=User.objects.get(email=fb)
+        friend=User.objects.get(fb_id=fb)
       except ObjectDoesNotExist:
         continue
       
